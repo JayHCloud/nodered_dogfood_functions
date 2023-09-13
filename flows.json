@@ -1,0 +1,127 @@
+[
+    {
+        "id": "d4ed3773aef80411",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "bea8673ebce5a4e4",
+        "type": "inject",
+        "z": "d4ed3773aef80411",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 780,
+        "y": 500,
+        "wires": [
+            [
+                "cb88e0b6c799171c"
+            ]
+        ]
+    },
+    {
+        "id": "38d15c1781652558",
+        "type": "api-call-service",
+        "z": "d4ed3773aef80411",
+        "name": "speak",
+        "server": "2552e78c.1cb908",
+        "version": 5,
+        "debugenabled": true,
+        "domain": "tts",
+        "service": "google_translate_say",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "media_player.jasons_room_2"
+        ],
+        "data": "{\"message\":\" {{payload}} \"}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1290,
+        "y": 500,
+        "wires": [
+            [
+                "34787a1cb72639ba"
+            ]
+        ]
+    },
+    {
+        "id": "34787a1cb72639ba",
+        "type": "debug",
+        "z": "d4ed3773aef80411",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1540,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "cb88e0b6c799171c",
+        "type": "function",
+        "z": "d4ed3773aef80411",
+        "name": "sensor function rev10",
+        "func": "//handles undefined context if server were to reset\n//flow scope allows other nodes to access these values\nif (flow.get(\"previousTimeContext\") === undefined) {\n    flow.set(\"previousTimeContext\", 0)\n}\n\nif (flow.get(\"countContext\") === undefined) {\n    flow.set(\"countContext\", 0)\n}\n\nvar currentTime = new Date();  \nvar previousTime = flow.get('previousTimeContext'); //gets values from contest so it persists between calls (context is like memory) \nvar count = flow.get('countContext'); \n\nconst previousTimeClean = previousTime.toLocaleString(\"en-US\", { //cleans up time to \"HH:MM ampm\" format\n    hour: \"numeric\",\n    minute: \"numeric\",\n    hour12: true,\n});\n\n\nif ((currentTime.getTime() - previousTime.getTime()) > 3)  //if has been at least 5 minutes (300000 ms)\n{\n    if (currentTime.toDateString() == previousTime.toDateString())  //and if this happens on the same day\n\n    {   //Spaces in string help tts enunciate better \n        msg = { payload: 'Roman was fed ' + count + ' times, last at ' + previousTimeClean};  //message payload for tts conversion\n    }\n\n    else  //new day, logs first feed time\n    {\n        msg = { payload: 'This is the first time roman is getting fed.' };\n    }\n\n    count++;\n    flow.set(\"countContext\", count); // saving variables to flow context \n    flow.set(\"previousTimeContext\", currentTime);\n}\n\nelse  //too many triggers in 5 minutes, want tts to say nothing\n{\n    msg = { payload: \" \"};\n}\n\nreturn msg;  //returns msg (with msg.payload)\n\n//TODO ensure it says \"time\" at count 1 opposed to \"times\"\n//TODO consider moving initializing if statements to \"On Start\" section",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1020,
+        "y": 500,
+        "wires": [
+            [
+                "38d15c1781652558",
+                "34787a1cb72639ba"
+            ]
+        ]
+    },
+    {
+        "id": "2552e78c.1cb908",
+        "type": "server",
+        "name": "Home Assistant",
+        "version": 5,
+        "addon": false,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "y|yes|true|on|home|open",
+        "connectionDelay": true,
+        "cacheJson": true,
+        "heartbeat": false,
+        "heartbeatInterval": "30",
+        "areaSelector": "friendlyName",
+        "deviceSelector": "friendlyName",
+        "entitySelector": "friendlyName",
+        "statusSeparator": "at: ",
+        "statusYear": "hidden",
+        "statusMonth": "short",
+        "statusDay": "numeric",
+        "statusHourCycle": "h23",
+        "statusTimeFormat": "h:m",
+        "enableGlobalContextStore": true
+    }
+]

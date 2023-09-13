@@ -1,0 +1,47 @@
+version: '3'
+services:
+#Homeassistant 
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    volumes:
+      - ${CONFIG}/homeassistant:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+    restart: unless-stopped
+    
+#MQTT Broker    
+  mosquitto:
+    image: eclipse-mosquitto
+    container_name: mosquitto
+    volumes:
+      - ${CONFIG}/mosquitto:/mosquitto
+      - ${CONFIG}/mosquitto/data:/mosquitto/data
+      - ${CONFIG}/mosquitto/log:/mosquitto/log
+    ports:
+      - 1883:1883
+      - 9001:9001      
+    restart: unless-stopped
+      
+      
+#Node Red Automation Platform  
+  node-red:
+    image: nodered/node-red:latest
+    environment:
+      - TZ=${TZ}
+    ports:
+      - "1880:1880"
+    networks:
+      - node-red-net
+    volumes:
+      - ${CONFIG}/nodered:/data
+      - ${CONFIG}/ssh:/sshnode
+    restart: unless-stopped
+
+volumes:
+  node-red-data:
+
+networks:
+  node-red-net: 
