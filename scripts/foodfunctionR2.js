@@ -32,6 +32,7 @@ if ((currentTime.getTime() - previousTime.getTime()) > 300000)  //if has been at
     else  
     {
         msg = { payload: 'This is the first time roman is getting fed.' };
+        let count = 0;
     }
 
     count++;
