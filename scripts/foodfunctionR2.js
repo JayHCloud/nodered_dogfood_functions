@@ -47,6 +47,6 @@ if ((currentTime.getTime() - previousTime.getTime()) > 300000)  //if has been at
 
 return msg;  //returns msg (with msg.payload)
 
-//TODO ensure it says "time" at count 1 opposed to "times"
+//TODO Ensure it says "time" at count 2 opposed to "times". On 2nd opening it says: Roman was fed 1 times, last at xyz.
 //TODO consider moving initializing if statements to "On Start" section\
 //TODO figure out what to do when container is opened too many times
