@@ -10,11 +10,11 @@ if (flow.get("countContext") === undefined) {
     flow.set("countContext", 0)
 }
 
-let currentTime = new Date();  
-let previousTime = flow.get('previousTimeContext'); //gets values from context so it persists between calls (context is like memory) 
-let count = flow.get('countContext'); 
+var currentTime = new Date();  
+var previousTime = flow.get('previousTimeContext'); //gets values from context so it persists between calls (context is like memory) 
+var count = flow.get('countContext'); 
 
-let previousTimeClean = previousTime.toLocaleString("en-US", { //cleans up time to "HH:MM ampm" format, sounds nice in tts
+var previousTimeClean = previousTime.toLocaleString("en-US", { //cleans up time to "HH:MM ampm" format, sounds nice in tts
     hour: "numeric",
     minute: "numeric",
     hour12: true,
@@ -32,7 +32,7 @@ if ((currentTime.getTime() - previousTime.getTime()) > 300000)  //if has been at
     else  
     {
         msg = { payload: 'This is the first time roman is getting fed.' };
-        let count = 0;
+        var count = 0;
     }
 
     count++;
