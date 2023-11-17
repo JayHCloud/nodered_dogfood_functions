@@ -6,10 +6,10 @@ if (flow.get("count") === undefined) { //sets count to 0 if food function hasnt 
     flow.set("count", 0)
 }
 
-let count = flow.get('countContext'); //grabbing variables from flow memory that were set from food function
-let previousTime = flow.get('previousTimeContext');
+var count = flow.get('countContext'); //grabbing variables from flow memory that were set from food function
+var previousTime = flow.get('previousTimeContext');
 
-let previousTimeClean = previousTime.toLocaleString("en-US", { //cleans up time to "HH:MM ampm" format
+var previousTimeClean = previousTime.toLocaleString("en-US", { //cleans up time to "HH:MM ampm" format
     hour: "numeric",
     minute: "numeric",
     hour12: true,
